@@ -1,0 +1,95 @@
+\documentclass[a4]{article}
+\usepackage{gnuplottex}
+\usepackage{csvsimple}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+
+\title{COMP26120 Lab 5 Report}
+\author{Suphal Sharma}
+\begin{document}
+\maketitle
+
+\section{What makes a problem hard for Dynamic Programming?}
+\subsection{Introduction}
+Dynamic Programming is an effective technique for problem-solving that involves breaking down a problem into smaller sub-problems and solving them recursively to obtain the optimal solution. However, not all problems are easy to solve using Dynamic Programming, and several factors make a problem more challenging to solve this way. These factors include problems with overlapping sub-problems, a large number of sub-problems, a complex state space, constraints, and non-optimal substructures.\\
+For the Knapsack problem we are conducting an experiment based on time complexity. In general,the time complexity of the dynamic programming solution to the knapsack problem is O(n*W), where n is the number of items and W is the maximum weight that the knapsack can hold.
+\subsection{Hypothesis}
+We hypothesize that with the increase in weight capacity of the knapsack, the problem becomes harder for dynamic programming due to the linear time complexity of the algorithm with respect to the weight capacity.\\
+This implies, we expect a linear growth in run time with the increase in weight capacity over fixed number of items. The time that the code takes to run is directly proportional to the weight capacity of the knapsack.
+\subsection{Design}
+The experiment was tested on a design setup with various knapsack instance files. Five files containing randomly inputted values were used to run the program on dynamic programming. For each file the number of items in the knapsack and upper bound were fixed to 60 and 20 respectively. The weight capacity was increased in each file. We used the capacities 500, 2500, 5000, 15000 and 30000. The code was run five times for all the files and the run time was recorded each time.
+\subsection{Results}
+The results are depicted using a table and a graph below.
+\begin{table}[h]
+\caption{Time Over Each Capacity}
+\begin{tabularx}{1\textwidth}{|X|X|X|X|X|X|X|}
+\hline
+Capacity & Time 1 & Time 2 & Time 3 & Time 4 & Time 5 & Avg. Time  \\
+\hline
+500 & 0.133 & 0.127 & 0.135 & 0.128 & 0.130 & 0.131\\
+\hline
+2500 & 0.150 & 0.154 & 0.147 & 0.151 & 0.148 & 0.150\\
+\hline
+5000 & 0.186 & 0.195 & 0.182 & 0.199 & 0.183 & 0.189\\
+\hline
+15000 & 0.234 & 0.258 & 0.230 & 0.208 & 0.218 & 0.230\\
+\hline
+30000 & 0.283 & 0.323 & 0.279 & 0.272 & 0.279 & 0.287\\
+\hline
+\end{tabularx}
+\label{tab:example}
+\end{table}
+\\The table gives clear numbers to compare the results of various times along with the overall averages.
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\begin{center}
+    \begin{gnuplot}[terminal=jpeg, terminaloptions={size 400,300 font "Arial,9"}]
+    max(x, y) = (x > y ? x:y)
+    min(x, y) = (x < y ? x:y)
+    set title "Running time and capacity graph"
+    set ylabel "Time(s)"
+    set xlabel "Capacities"
+    set xrange[0:40000]
+
+    f(x) = m * x + q
+
+    fit f(x) 'exp1.dat' using 1:2 via m, q
+
+    mq_value =sprintf("\n\n\n\n\n\n\n\n\n\nParametersnvalues\nm = %f \nq =%f", m, q)
+    set label 1 at 2000,3 mq_value
+
+    plot "exp1.dat" using 1:2 t "time", f(x) ls 2 t 'Best Fit Line'
+    set out
+    \end{gnuplot}
+\end{center}
+\label{fig:sorted1}
+The graph helps derive a correlation between the run time for the problem and the capacity of the knapsack.
+\newpage
+\subsection{Discussion}
+Earlier we had proposed that experiment will show linear growth in run time. Mathematically, time complexity for knapsack problem with dynamic programming is O(n*W) where n is the number of items in the knapsack and w is its weight capacity. If we keep number of items constant the time complexity can be written as O(W). This is clearly evident in the result of the experiment.\\
+Therefore, the experiment supports our hypothesis. Here, we have used a very small sample size of 5 files and ran it just 5 times. We can get even better results if the sample size is bigger.
+\subsection{Data Statement}
+\subsubsection{Step 1}
+We generated five files using the following command:\\
+python3 kp\_generate.py 60 500 20 test1.txt\\
+python3 kp\_generate.py 60 2500 20 test2.txt\\
+python3 kp\_generate.py 60 5000 20 test3.txt\\
+python3 kp\_generate.py 60 15000 20 test4.txt\\
+python3 kp\_generate.py 60 30000 20 test5.txt\\
+\subsubsection{Step 2}
+We recorded runtime using the following commands five times each:\\
+time java comp26120.dp\_kp ../test1.txt\\
+time java comp26120.dp\_kp ../test2.txt\\
+time java comp26120.dp\_kp ../test3.txt\\
+time java comp26120.dp\_kp ../test4.txt\\
+time java comp26120.dp\_kp ../test5.txt\\
+\subsubsection{Step 3}
+Using this data, we created the exp1.dat file to plot the graph
+\appendix
+
+%% Any raw data or code scripts you want to present should be included as appendices.
+\end{document}
